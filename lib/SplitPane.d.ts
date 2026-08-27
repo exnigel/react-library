@@ -4,6 +4,7 @@ export interface SplitPaneProps {
     firstPaneSize?: string | number;
     minFirstPaneSize?: number;
     onResize: (size?: number | string) => void;
+    children?: React.ReactNode;
 }
 export default class SplitPane extends React.Component<SplitPaneProps, {
     resizing: boolean;

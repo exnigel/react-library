@@ -2,6 +2,7 @@ import React from "react";
 export interface FillDownwardComponentProps {
     /** Optional bottom margin */
     margin?: number;
+    children?: React.ReactNode;
 }
 /** Component which sets its height to automatically fill all remaining vertical space, minus an optional margin */
 export default class FillDownwardComponent extends React.Component<FillDownwardComponentProps, {

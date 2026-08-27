@@ -4,6 +4,7 @@ const R = React.createElement
 export interface FillDownwardComponentProps {
   /** Optional bottom margin */
   margin?: number
+  children?: React.ReactNode
 }
 
 /** Component which sets its height to automatically fill all remaining vertical space, minus an optional margin */

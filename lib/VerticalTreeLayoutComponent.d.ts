@@ -5,6 +5,7 @@ export interface VerticalTreeLayoutComponentProps {
     /** e.g. 50 */
     height?: number;
     line: string;
+    children?: React.ReactNode;
 }
 export default class VerticalTreeLayoutComponent extends React.Component<VerticalTreeLayoutComponentProps> {
     renderChildren(): (React.CElement<import("./CrossComponent").CrossComponentProps, CrossComponent> | React.DetailedReactHTMLElement<{

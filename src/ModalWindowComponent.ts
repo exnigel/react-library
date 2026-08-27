@@ -15,6 +15,7 @@ export interface ModalWindowComponentProps {
   outerPadding?: number
   /** Inner padding default 20 */
   innerPadding?: number
+  children?: React.ReactNode
 }
 
 // Modal window that fills screen
@@ -75,6 +76,7 @@ interface InnerModalComponentProps {
   /** Inner padding default 20 */
   innerPadding?: number
   backgroundColor?: string
+  children?: React.ReactNode
 }
 
 // Content must be rendered at body level to prevent weird behaviour, so this is the inner component

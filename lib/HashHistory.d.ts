@@ -88,6 +88,6 @@ export interface HashLocation {
     /** Index of page in stack. Can be used to sense pushes/pops to same location */
     index: number;
 }
-export declare type HashLocationListener = (location: HashLocation) => void;
+export type HashLocationListener = (location: HashLocation) => void;
 /** True if blocked, false to proceed */
-export declare type HashBlockerListener = (prevLocation: HashLocation, nextLocation: HashLocation) => Promise<boolean> | boolean;
+export type HashBlockerListener = (prevLocation: HashLocation, nextLocation: HashLocation) => Promise<boolean> | boolean;

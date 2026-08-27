@@ -5,9 +5,10 @@ export interface PopoverHelpComponentProps {
     trigger?: "hover" | "click";
     /** Override content. Defaults to gray question circle */
     content?: ReactNode;
+    children?: ReactNode;
 }
 /** Shows a popover when help icon is clicked. Needs bootstrap */
 export default class PopoverHelpComponent extends React.Component<PopoverHelpComponentProps> {
     divRef: (el: any) => void;
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }

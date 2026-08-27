@@ -91,14 +91,14 @@ export default class ReactElementPrinter {
       )
 
       // Render element into special region
-      ReactDOM.render(element, $("#react_element_printer").get(0), () => {
+      ReactDOM.render(element, $("#react_element_printer").get(0)!, () => {
         // Wait for element to render
         _.delay(() => {
           // Call print
           window.print()
 
           // Unmount component
-          ReactDOM.unmountComponentAtNode($("#react_element_printer").get(0))
+          ReactDOM.unmountComponentAtNode($("#react_element_printer").get(0)!)
 
           // Remove rest of nodes
           $("#react_element_printer").remove()

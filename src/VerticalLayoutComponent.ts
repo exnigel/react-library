@@ -7,6 +7,8 @@ export interface VerticalLayoutComponentProps {
 
   /** Fraction to allocate for fractional heights. Should total 1.0. Keyed by key of child */
   relativeHeights: { [key: string]: number }
+
+  children?: React.ReactNode
 }
 
 interface VerticalLayoutComponentState {

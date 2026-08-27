@@ -66,8 +66,12 @@ const Editor = (props: { width: number; setSaveEdit: (saveEditFunc: SaveEditFunc
     })
   })
 
+  // react-select v5's ref exposes a different shape than the v3-era one this demo predates
+  // (focus() is still there at runtime, just not on the type this version's own .d.ts declares) --
+  // demo-only code (not consumed by mwater-forms, see 6.4b's write-up), so `any` here is a
+  // deliberate, low-stakes type relaxation rather than chasing react-select's exact current ref type.
   /** Focus on select */
-  const selectRef = useCallback((node: ReactSelect | null) => {
+  const selectRef = useCallback((node: any) => {
     if (node) {
       setTimeout(() => {
         node.focus()

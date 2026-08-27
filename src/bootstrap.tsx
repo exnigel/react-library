@@ -19,6 +19,7 @@ export class Button extends React.Component<{
   active?: boolean
   /** xs is deprecated. TODO how to handle */
   size?: "sm" | "xs" | "lg"
+  children?: ReactNode
 }> {
   static defaultProps = { type: "secondary" }
 
@@ -71,6 +72,7 @@ export class FormGroup extends React.Component<{
   hasWarnings?: boolean
   /** @deprecated True to display as error */
   hasErrors?: boolean
+  children?: ReactNode
 }> {
   render() {
     return R(
@@ -109,6 +111,7 @@ export interface CheckboxProps {
   /** Uses null for false */
   nullForFalse?: boolean
   disabled?: boolean
+  children?: ReactNode
 }
 
 export class Checkbox extends React.Component<CheckboxProps> {
@@ -176,6 +179,8 @@ export interface RadioProps {
   inline?: boolean
 
   disabled?: boolean
+
+  children?: ReactNode
 }
 
 export class Radio extends React.Component<RadioProps> {
@@ -512,6 +517,8 @@ export interface CollapsibleSectionProps {
 
   /** Hint to append to label. Makes label faded if only hint presented */
   hint?: ReactNode
+
+  children?: ReactNode
 }
 
 /** Indented section than can be opened and closed. Defaults closed */

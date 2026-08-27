@@ -21,6 +21,7 @@ export interface ActionCancelModalComponentProps {
     actionBusy?: boolean;
     /** True for delete button to show spinner and be disabled */
     deleteBusy?: boolean;
+    children?: React.ReactNode;
 }
 export default class ActionCancelModalComponent extends React.Component<ActionCancelModalComponentProps> {
     render(): React.CElement<import("./ModalPopupComponent").ModalPopupComponentProps, ModalPopupComponent>;

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { LocalizeString } from "ez-localize";
 /** Row of a GANTT chart */
 export interface GanttChartRow {
@@ -45,4 +45,4 @@ export declare function GanttChart(props: {
     onRemoveRow?: (rowIndex: number) => void;
     /** Localizer for labels */
     T: LocalizeString;
-}): JSX.Element;
+}): React.JSX.Element;

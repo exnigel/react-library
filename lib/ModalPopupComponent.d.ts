@@ -11,11 +11,12 @@ export interface ModalPopupComponentProps {
     /** callback function to be called when close is requested */
     onClose?: () => void;
     width?: number;
+    children?: React.ReactNode;
 }
 export default class ModalPopupComponent extends React.Component<ModalPopupComponentProps> {
     modalNode: any;
     /** Render something into a top-level div */
-    static show: (modalFunc: (close: () => void) => ReactElement, onClose?: (() => void) | undefined) => void | Element | React.Component<any, any, any>;
+    static show: (modalFunc: (close: () => void) => ReactElement, onClose?: () => void) => void | Element | React.Component<any, any, any>;
     constructor(props: ModalPopupComponentProps);
     componentWillUnmount(): any;
     render(): React.ReactPortal;
@@ -32,4 +33,5 @@ export interface InnerModalComponentProps {
     /** callback function to be called when close is requested */
     onClose?: any;
     width?: number;
+    children?: React.ReactNode;
 }

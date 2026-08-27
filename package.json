@@ -49,6 +49,7 @@
     "@types/jquery": "^3.5.6",
     "@types/lodash": "^3.10.3",
     "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.7",
     "@types/uuid": "^3.4.10",
     "build-library": "github:mWater/build-library",
     "canonical-json": "0.0.4",

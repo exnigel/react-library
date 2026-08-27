@@ -11,6 +11,7 @@ export interface VerticalTreeLayoutComponentProps {
   /** e.g. 50 */
   height?: number
   line: string
+  children?: React.ReactNode
 }
 
 // Makes a vertical tree component with lines between

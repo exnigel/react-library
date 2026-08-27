@@ -12,6 +12,7 @@ export declare class Button extends React.Component<{
     active?: boolean;
     /** xs is deprecated. TODO how to handle */
     size?: "sm" | "xs" | "lg";
+    children?: ReactNode;
 }> {
     static defaultProps: {
         type: string;
@@ -47,6 +48,7 @@ export declare class FormGroup extends React.Component<{
     hasWarnings?: boolean;
     /** @deprecated True to display as error */
     hasErrors?: boolean;
+    children?: ReactNode;
 }> {
     render(): React.DetailedReactHTMLElement<{
         className: string;
@@ -59,6 +61,7 @@ export interface CheckboxProps {
     /** Uses null for false */
     nullForFalse?: boolean;
     disabled?: boolean;
+    children?: ReactNode;
 }
 export declare class Checkbox extends React.Component<CheckboxProps> {
     id: string;
@@ -78,6 +81,7 @@ export interface RadioProps {
     /** Makes horizontal */
     inline?: boolean;
     disabled?: boolean;
+    children?: ReactNode;
 }
 export declare class Radio extends React.Component<RadioProps> {
     id: string;
@@ -109,7 +113,7 @@ export declare class Select<T> extends React.Component<{
         onChange: (ev: any) => void;
     }, Element>;
 }
-export declare type TextInputProps = TextInputPropsNull | TextInputPropsNoNull;
+export type TextInputProps = TextInputPropsNull | TextInputPropsNoNull;
 export interface TextInputPropsNoNull {
     value: string | null;
     onChange?: (value: string) => void;
@@ -177,6 +181,7 @@ export interface CollapsibleSectionProps {
     labelMuted?: boolean;
     /** Hint to append to label. Makes label faded if only hint presented */
     hint?: ReactNode;
+    children?: ReactNode;
 }
 /** Indented section than can be opened and closed. Defaults closed */
 export declare class CollapsibleSection extends React.Component<CollapsibleSectionProps, {
@@ -213,7 +218,14 @@ export declare class Toggle<T> extends React.Component<{
     size?: "xs" | "sm" | "lg";
     allowReset?: boolean;
 }> {
-    renderOption: (option: any, index: any) => React.DOMElement<React.DOMAttributes<Element>, Element>;
+    renderOption: (option: any, index: any) => React.DetailedReactHTMLElement<{
+        key: any;
+        type: string;
+        className: string;
+        style: {
+            whiteSpace: string;
+        };
+    }, HTMLElement>;
     render(): React.DetailedReactHTMLElement<{
         className: string;
     }, HTMLElement>;
@@ -224,4 +236,4 @@ export declare function CollapsiblePanel(props: {
     hint?: ReactNode;
     children: any;
     initiallyClosed?: boolean;
-}): JSX.Element;
+}): React.JSX.Element;

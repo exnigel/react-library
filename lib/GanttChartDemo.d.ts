@@ -1,2 +1,2 @@
-/// <reference types="react" />
-export declare function GanttChartDemo(): JSX.Element;
+import React from "react";
+export declare function GanttChartDemo(): React.JSX.Element;

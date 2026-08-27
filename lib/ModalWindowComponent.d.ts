@@ -9,11 +9,12 @@ export interface ModalWindowComponentProps {
     outerPadding?: number;
     /** Inner padding default 20 */
     innerPadding?: number;
+    children?: React.ReactNode;
 }
 export default class ModalWindowComponent extends React.Component<ModalWindowComponentProps> {
     modalNode: any;
     /** Render something into a top-level div */
-    static show: (modalFunc: (close: () => void) => ReactElement, onClose?: (() => void) | undefined) => void | Element | React.Component<any, any, any>;
+    static show: (modalFunc: (close: () => void) => ReactElement, onClose?: () => void) => void | Element | React.Component<any, any, any>;
     constructor(props: ModalWindowComponentProps);
     componentWillUnmount(): any;
     render(): React.ReactPortal;

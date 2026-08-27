@@ -15,6 +15,7 @@ export interface ModalPopupComponentProps {
   /** callback function to be called when close is requested */
   onClose?: () => void
   width?: number
+  children?: React.ReactNode
 }
 
 // Modal popup based on react
@@ -79,6 +80,7 @@ export interface InnerModalComponentProps {
   /** callback function to be called when close is requested */
   onClose?: any
   width?: number
+  children?: React.ReactNode
 }
 
 // Content must be rendered at body level to prevent weird behaviour, so this is the inner component

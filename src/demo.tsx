@@ -20,7 +20,7 @@ import { default as HTML5Backend } from "react-dnd-html5-backend"
 import { DragDropContext } from "react-dnd"
 import { ListEditorComponent } from "./ListEditorComponent"
 
-class PopoverHelpSample extends React.Component {
+class PopoverHelpSample extends React.Component<any, any> {
   render() {
     return R("div", { style: { margin: 20 }},
       R(PopoverHelpComponent, null, "This is a test")
@@ -28,19 +28,19 @@ class PopoverHelpSample extends React.Component {
   }
 }
 
-class Block extends React.Component {
+class Block extends React.Component<any, any> {
   render() {
     return R("div", { style: { height: 200, width: 200, border: "solid 2px blue" } }, " ")
   }
 }
 
-class Block2 extends React.Component {
+class Block2 extends React.Component<any, any> {
   render() {
     return R("div", { style: { height: 300, width: 200, border: "solid 2px blue" } }, " ")
   }
 }
 
-class ReactElementPrinterSample extends React.Component {
+class ReactElementPrinterSample extends React.Component<any, any> {
   handlePrint = () => {
     const printer = new ReactElementPrinter()
     const elem = R("h1", null, "Print this!")
@@ -52,7 +52,7 @@ class ReactElementPrinterSample extends React.Component {
   }
 }
 
-class ModalWindowSample extends React.Component {
+class ModalWindowSample extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -95,7 +95,7 @@ class ModalWindowSample extends React.Component {
   }
 }
 
-class ModalPopupSample extends React.Component {
+class ModalPopupSample extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -136,7 +136,7 @@ class ModalPopupSample extends React.Component {
   }
 }
 
-class SortableSampleItem extends React.Component {
+class SortableSampleItem extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -192,7 +192,7 @@ class SortableSampleItem extends React.Component {
   }
 }
 
-class SortableSample extends React.Component {
+class SortableSample extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -290,7 +290,7 @@ class SortableSample extends React.Component {
     }
   }
 
-  findNodeById(items: any, id: any) {
+  findNodeById(items: any, id: any): any {
     for (let index = 0; index < items.length; index++) {
       const value = items[index]
       if (value.id === id) {
@@ -347,7 +347,7 @@ class SortableSample extends React.Component {
   }
 }
 
-class BlocksComponent extends React.Component {
+class BlocksComponent extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -435,15 +435,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
   }
 }
 
-class AutoSizeTestComponent extends React.Component {
+class AutoSizeTestComponent extends React.Component<any, any> {
   render() {
-    return R(AutoSizeComponent, { injectHeight: true }, (size: any) => {
-      return R("div", { style: { height: size.height + 1, backgroundColor: "#FDF" } }, JSON.stringify(size))
+    // React.createElement's generic overloads don't recognize a function passed positionally as
+    // matching a component's own function-typed `children` prop (AutoSizeComponent's render-prop
+    // pattern) the way JSX syntax does -- passing it via the props object instead sidesteps the
+    // overload ambiguity entirely (React treats the two identically at runtime).
+    return R(AutoSizeComponent, {
+      injectHeight: true,
+      children: (size: any) => {
+        return R("div", { style: { height: size.height + 1, backgroundColor: "#FDF" } }, JSON.stringify(size))
+      }
     })
   }
 }
 
-class ToggleTestComponent extends React.Component {
+class ToggleTestComponent extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {
@@ -469,7 +476,7 @@ class ToggleTestComponent extends React.Component {
 }
 // allowReset: true
 
-class ReorderDemo extends React.Component {
+class ReorderDemo extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
     this.state = {

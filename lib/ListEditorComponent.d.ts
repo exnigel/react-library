@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import React from "react";
 /** Generic editor for a list of items that shows the items within a Bootstrap 3 list-group.
  * Adding and editing are done via a popup if present
  */
@@ -25,4 +26,4 @@ export declare function ListEditorComponent<T>(props: {
     editLink?: boolean;
     /** Selected item is highlighted */
     selectedIndex?: number;
-}): JSX.Element;
+}): React.JSX.Element;

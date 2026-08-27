@@ -33,6 +33,8 @@ export interface SplitPaneProps {
   // Callback function that will be called when the resizing is done.
   // The current size of the firstpane is passed as first argument
   onResize: (size?: number | string) => void
+
+  children?: React.ReactNode
 }
 
 export default class SplitPane extends React.Component<

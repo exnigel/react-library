@@ -6,6 +6,7 @@ export interface VerticalLayoutComponentProps {
     relativeHeights: {
         [key: string]: number;
     };
+    children?: React.ReactNode;
 }
 interface VerticalLayoutComponentState {
     availableHeight: any;

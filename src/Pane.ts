@@ -16,10 +16,13 @@ const R = React.createElement
 export default class Pane extends React.Component<{
   split?: "vertical" | "horizontal"
   width?: number | string
+  children?: React.ReactNode
 }> {
-  static defaultProps() {
-    return { split: "vertical" }
-  }
+  // Was `static defaultProps() { return {...} }` -- a method declaration, not a property
+  // assignment, so React never actually read it (defaultProps must be a plain object on the
+  // class, not a function) -- this default has silently never applied at runtime. Real bug,
+  // found while fixing this file's TypeScript errors for React 18 compatibility.
+  static defaultProps = { split: "vertical" as const }
 
   render() {
     const classNames = ["pane"]

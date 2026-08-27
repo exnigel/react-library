@@ -1,3 +1,4 @@
+import React from "react";
 import { ReactNode, ReactElement } from "react";
 /** Grid that has headers on rows and columns. Has virtual, high-performance scrolling.
  * Handles:
@@ -66,7 +67,7 @@ export declare const GridComponent: (props: {
     onRowClick?: ((rowIndex: number) => void) | undefined;
     /** Handle row double click. Prevents editing by double click if present */
     onRowDoubleClick?: ((rowIndex: number) => void) | undefined;
-}) => JSX.Element;
+}) => React.JSX.Element;
 /** Props passed to render a cell */
 export interface RenderCellProps {
     /** Zero-based row number */
@@ -103,7 +104,7 @@ export interface RenderRowHeaderProps {
     selected: boolean;
 }
 /** Will be called to save the current edit. Returns true if successful */
-export declare type SaveEditFunc = () => Promise<boolean>;
+export type SaveEditFunc = () => Promise<boolean>;
 export interface RenderCellEditorProps {
     /** Zero-based row number */
     row: number;

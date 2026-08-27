@@ -1,9 +1,13 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import ModalPopupComponent from "./ModalPopupComponent"
 
+export interface PopupHelpComponentProps {
+  children?: ReactNode
+}
+
 /** Shows a popup when help icon is clicked. Needs bootstrap */
-export default class PopoverHelpComponent extends React.Component<{}, { open: boolean }> {
-  constructor(props: {}) {
+export default class PopoverHelpComponent extends React.Component<PopupHelpComponentProps, { open: boolean }> {
+  constructor(props: PopupHelpComponentProps) {
     super(props)
 
     this.state = { open: false }

@@ -24,6 +24,7 @@ export interface ActionCancelModalComponentProps {
   actionBusy?: boolean
   /** True for delete button to show spinner and be disabled */
   deleteBusy?: boolean
+  children?: React.ReactNode
 }
 
 // Modal with action and cancel buttons

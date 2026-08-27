@@ -11,6 +11,8 @@ export interface PopoverHelpComponentProps {
 
   /** Override content. Defaults to gray question circle */
   content?: ReactNode
+
+  children?: ReactNode
 }
 
 /** Shows a popover when help icon is clicked. Needs bootstrap */
