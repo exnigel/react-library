@@ -25,9 +25,6 @@ export default class TabbedComponent extends React.Component<TabbedComponentProp
     constructor(props: any);
     handleClick: (tabId: any) => void;
     handleRemove: (tab: any, ev: any) => any;
-    renderTab: (tab: any) => React.DetailedReactHTMLElement<{
-        key: any;
-        className: string;
-    }, HTMLElement>;
+    renderTab: (tab: any) => React.DetailedReactHTMLElement<React.HTMLAttributes<HTMLElement>, HTMLElement>;
     render(): React.DetailedReactHTMLElement<React.HTMLAttributes<HTMLElement>, HTMLElement>;
 }

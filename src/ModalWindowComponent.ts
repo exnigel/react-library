@@ -145,9 +145,15 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
         { style: windowStyle, className: "modal-window-component-window" },
         R("div", { style: contentStyle }, this.props.children),
         this.props.onRequestClose
-          ? 
-            R("div", { style: closeStyle }, 
-              R("button", { type: "button", className: "btn-close", onClick: this.props.onRequestClose })
+          ?
+            R("div", { style: closeStyle },
+              // Feature 6.4b: was Bootstrap's `.btn-close` (icon via CSS background-image)
+              R("button", {
+                type: "button",
+                className: "inline-flex items-center justify-center w-6 h-6 text-xl leading-none bg-transparent border-0 rounded opacity-50 hover:opacity-75 cursor-pointer",
+                "aria-label": "Close",
+                onClick: this.props.onRequestClose
+              }, "×")
             )
           : undefined
       )

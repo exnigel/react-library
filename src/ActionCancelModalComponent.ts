@@ -27,6 +27,11 @@ export interface ActionCancelModalComponentProps {
   children?: React.ReactNode
 }
 
+// Feature 6.4b: migrated from Bootstrap's `btn btn-{type}`/`me-auto` classes to Tailwind,
+// matching bootstrap.tsx's `Button` component's own recipe for visual consistency.
+const BTN_BASE =
+  "inline-block text-center align-middle cursor-pointer select-none border rounded transition-colors hover:opacity-90 disabled:opacity-65 disabled:cursor-not-allowed px-3 py-1.5 text-base"
+
 // Modal with action and cancel buttons
 export default class ActionCancelModalComponent extends React.Component<ActionCancelModalComponentProps> {
   render() {
@@ -43,7 +48,7 @@ export default class ActionCancelModalComponent extends React.Component<ActionCa
                   key: "delete",
                   type: "button",
                   onClick: this.props.onDelete,
-                  className: "btn btn-danger me-auto"
+                  className: `${BTN_BASE} bg-danger border-danger text-white mr-auto`
                 },
                 this.props.deleteBusy ? [R("i", { className: "fa fa-spinner fa-spin" }), "\u00A0"] : undefined,
                 this.props.deleteLabel || "Delete"
@@ -57,7 +62,7 @@ export default class ActionCancelModalComponent extends React.Component<ActionCa
                   type: "button",
                   onClick: this.props.onAction,
                   disabled: this.props.actionBusy,
-                  className: "btn btn-primary"
+                  className: `${BTN_BASE} bg-primary border-primary text-white`
                 },
                 this.props.actionBusy ? [R("i", { className: "fa fa-spinner fa-spin" }), "\u00A0"] : undefined,
                 this.props.actionLabel || "Save"
@@ -69,7 +74,7 @@ export default class ActionCancelModalComponent extends React.Component<ActionCa
               key: "cancel",
               type: "button",
               onClick: this.props.onCancel,
-              className: "btn btn-secondary"
+              className: `${BTN_BASE} bg-secondary border-secondary text-white`
             },
             this.props.cancelLabel || (this.props.onAction ? "Cancel" : "Close")
           ),

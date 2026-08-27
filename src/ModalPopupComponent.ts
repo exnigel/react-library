@@ -83,19 +83,28 @@ export interface InnerModalComponentProps {
   children?: React.ReactNode
 }
 
+// Feature 6.4b: migrated from Bootstrap's `.modal`/`.modal-dialog`/`.modal-content`/etc. classes
+// to Tailwind utilities. `.modal`'s own fixed/inset/z-index positioning (previously provided
+// entirely by Bootstrap's stylesheet -- this component's own `rootStyle` only ever set
+// `display`) now needs to be explicit. `.btn-close` (an empty button styled via a CSS
+// background-image X icon) is replaced with a real "×" character, since there's no equivalent
+// utility-only icon.
+const CLOSE_BUTTON_CLASSES =
+  "inline-flex items-center justify-center w-6 h-6 text-xl leading-none bg-transparent border-0 rounded opacity-50 hover:opacity-75 cursor-pointer"
+
 // Content must be rendered at body level to prevent weird behaviour, so this is the inner component
 class InnerModalComponent extends React.Component<InnerModalComponentProps> {
   render() {
     let dialogStyle
-    let dialogClass = "modal-dialog"
+    let dialogSizeClass = "sm:max-w-[500px]"
     if (this.props.size === "large") {
-      dialogClass += " modal-lg"
+      dialogSizeClass = "sm:max-w-[800px]"
     }
     if (this.props.size === "small") {
-      dialogClass += " modal-sm"
+      dialogSizeClass = "sm:max-w-[300px]"
     }
     else if (this.props.size === "x-large") {
-      dialogClass += " modal-xl"
+      dialogSizeClass = "sm:max-w-[1140px]"
     }
     else if (this.props.size === "full") {
       dialogStyle = { maxWidth: "95%" }
@@ -120,22 +129,22 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
 
     return R(
       "div",
-      { style: rootStyle, className: "modal show" },
+      { style: rootStyle, className: "fixed inset-0 z-[1055] overflow-y-auto outline-none" },
       R("style", null, "body { overflow-y: hidden }"),
       R("div", { style: overlayStyle, onClick: this.props.onClose }),
       R(
         "div",
-        { className: dialogClass, style: dialogStyle },
+        { className: `relative mx-auto my-8 w-[calc(100%-1rem)] ${dialogSizeClass}`, style: dialogStyle },
         R(
           "div",
-          { className: "modal-content" },
+          { className: "relative flex flex-col w-full bg-white border border-black/20 rounded-md shadow-lg outline-none" },
           this.props.header
             ? R(
                 "div",
-                { className: "modal-header" },
-                R("h5", { className: "modal-title" }, this.props.header),
+                { className: "flex items-center justify-between px-4 py-3 border-b border-gray-200 rounded-t-md" },
+                R("h5", { className: "text-lg font-medium m-0", "data-testid": "modal-title" }, this.props.header),
                 this.props.showCloseX
-                  ? R("button", { type: "button", className: "btn-close", onClick: this.props.onClose })
+                  ? R("button", { type: "button", className: CLOSE_BUTTON_CLASSES, "aria-label": "Close", onClick: this.props.onClose }, "×")
                   : undefined,
               )
             : undefined,
@@ -143,7 +152,7 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
           R(
             "div",
             {
-              className: "modal-body",
+              className: "p-4 flex-1",
               style: {
                 maxHeight: window.innerHeight - (this.props.header ? 56 : 0) - (this.props.footer ? 65 : 0) - 30 - 30,
                 overflowY: "auto"
@@ -151,12 +160,15 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
             },
             this.props.children
           ),
-          this.props.footer ? R("div", { className: "modal-footer" }, this.props.footer) : undefined,
+          this.props.footer
+            ? R("div", { className: "flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-200 rounded-b-md" }, this.props.footer)
+            : undefined,
 
           !this.props.header && this.props.showCloseX
             ? R(
                 "button",
-                { className: "btn-close", onClick: this.props.onClose, style: { position: "absolute", right: 10, top: 10 } }, // Put above body
+                { className: CLOSE_BUTTON_CLASSES, "aria-label": "Close", onClick: this.props.onClose, style: { position: "absolute", right: 10, top: 10 } }, // Put above body
+                "×"
               )
             : undefined
         )

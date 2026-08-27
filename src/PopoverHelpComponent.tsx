@@ -15,6 +15,12 @@ export interface PopoverHelpComponentProps {
   children?: ReactNode
 }
 
+// Feature 6.4b: NOT migrated off Bootstrap. Unlike this codebase's other components, this one
+// uses `bootstrap/js/dist/popover` -- a real Bootstrap JS widget whose popup markup/styling
+// (`.popover`, `.popover-body`, `.popover-arrow`) is generated internally by that widget, not by
+// classnames in this file. Removing it means replacing the widget itself, not just swapping
+// classes -- out of scope for 6.4b's classname migration. Still requires Bootstrap's CSS to be
+// present wherever this component is used.
 /** Shows a popover when help icon is clicked. Needs bootstrap */
 export default class PopoverHelpComponent extends React.Component<PopoverHelpComponentProps> {
   divRef = (el: any) => {
@@ -37,7 +43,7 @@ export default class PopoverHelpComponent extends React.Component<PopoverHelpCom
       {
         this.props.content ? 
         this.props.content : 
-        <span className="text-muted" style={{ cursor: "pointer" }}>
+        <span className="text-secondary" style={{ cursor: "pointer" }}>
           <i className="fa fa-question-circle"/>
         </span>
       }

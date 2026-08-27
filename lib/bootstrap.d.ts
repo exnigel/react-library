@@ -17,6 +17,7 @@ export declare class Button extends React.Component<{
     static defaultProps: {
         type: string;
     };
+    static typeClasses: Record<string, string>;
     render(): React.DetailedReactHTMLElement<{
         type: string;
         className: string;

@@ -28,7 +28,8 @@ export default class PopoverHelpComponent extends React.Component<PopupHelpCompo
             {this.props.children}
           </ModalPopupComponent>
         ) : null}
-        <i className="text-muted fa fa-question-circle" style={{ cursor: "pointer" }} onClick={this.handleOpen} />
+        {/* Feature 6.4b: was Bootstrap's `text-muted` */}
+        <i className="text-secondary fa fa-question-circle" style={{ cursor: "pointer" }} onClick={this.handleOpen} />
       </div>
     )
   }

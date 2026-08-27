@@ -208,60 +208,65 @@ export function GanttChart(props: {
             >
               <i className="fa fa-caret-square-o-down text-primary" />
             </div>
+            {/* Feature 6.4b: `.dropdown-menu`/`.dropdown-item`/`data-bs-toggle` are NOT migrated
+                -- this dropdown's open/close behavior is driven by Bootstrap's Dropdown JS
+                widget, which toggles `.show` (a Bootstrap-CSS-only class) on `.dropdown-menu`.
+                Removing those classes would leave the toggle with nothing to show/hide. Only the
+                purely cosmetic `text-muted` below (no behavior tied to it) is converted. */}
             <ul className="dropdown-menu" style={{ marginTop: 0 }}>
               {props.onInsertRowAbove != null ? (
                 <li>
                   <a className="dropdown-item" onClick={() => props.onInsertRowAbove!(index)}>
-                    <i className="fa fa-fw text-muted fa-chevron-up" /> {props.T("Add Above")}
+                    <i className="fa fa-fw text-secondary fa-chevron-up" /> {props.T("Add Above")}
                   </a>
                 </li>
               ) : null}
               {props.onInsertRowBelow != null ? (
                 <li>
                   <a className="dropdown-item" onClick={() => props.onInsertRowBelow!(index)}>
-                    <i className="fa fa-fw text-muted fa-chevron-down" /> {props.T("Add Below")}
+                    <i className="fa fa-fw text-secondary fa-chevron-down" /> {props.T("Add Below")}
                   </a>
                 </li>
               ) : null}
               {props.onInsertChildRow != null ? (
                 <li>
                   <a className="dropdown-item" onClick={() => props.onInsertChildRow!(index)}>
-                    <i className="fa fa-fw text-muted fa-chevron-right" /> {props.T("Add Subitem")}
+                    <i className="fa fa-fw text-secondary fa-chevron-right" /> {props.T("Add Subitem")}
                   </a>
                 </li>
               ) : null}
               {canMoveUp ? (
                 <li key="moveUp">
                   <a className="dropdown-item" onClick={() => props.onMoveRowUp!(index)}>
-                    <i className="fa fa-fw text-muted fa-arrow-up" /> {props.T("Move Up")}
+                    <i className="fa fa-fw text-secondary fa-arrow-up" /> {props.T("Move Up")}
                   </a>
                 </li>
               ) : null}
               {canMoveDown ? (
                 <li key="moveDown">
                   <a className="dropdown-item" onClick={() => props.onMoveRowDown!(index)}>
-                    <i className="fa fa-fw text-muted fa-arrow-down" /> {props.T("Move Down")}
+                    <i className="fa fa-fw text-secondary fa-arrow-down" /> {props.T("Move Down")}
                   </a>
                 </li>
               ) : null}
               {canMoveLeft ? (
                 <li key="moveLeft">
                   <a className="dropdown-item" onClick={() => props.onMoveRowLeft!(index)}>
-                    <i className="fa fa-fw text-muted fa-arrow-left" /> {props.T("Move Left")}
+                    <i className="fa fa-fw text-secondary fa-arrow-left" /> {props.T("Move Left")}
                   </a>
                 </li>
               ) : null}
               {canMoveRight ? (
                 <li key="moveRight">
                   <a className="dropdown-item" onClick={() => props.onMoveRowRight!(index)}>
-                    <i className="fa fa-fw text-muted fa-arrow-right" /> {props.T("Move Right")}
+                    <i className="fa fa-fw text-secondary fa-arrow-right" /> {props.T("Move Right")}
                   </a>
                 </li>
               ) : null}
               {props.onRemoveRow ? (
                 <li key="removeRow">
                   <a className="dropdown-item" onClick={() => props.onRemoveRow!(index)}>
-                    <i className="fa fa-fw text-muted fa-remove" /> {props.T("Remove")}
+                    <i className="fa fa-fw text-secondary fa-remove" /> {props.T("Remove")}
                   </a>
                 </li>
               ) : null}

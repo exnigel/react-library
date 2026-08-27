@@ -16,8 +16,9 @@ export default class LoadingComponent extends React.Component<LoadingComponentPr
     width: "100%",
     height: "100%",
     label: R(
+      // Feature 6.4b: was Bootstrap's `text-muted`
       "div",
-      { className: "text-muted", style: { fontSize: 30 } },
+      { className: "text-secondary", style: { fontSize: 30 } },
       R("i", { className: "fa fa-spin fa-spinner" }),
       " Loading..."
     )

@@ -85,16 +85,24 @@ export function ListEditorComponent<T>(props: {
       }
     }
 
+    // Feature 6.4b: was Bootstrap's `.list-group-item`/`.active` (with `var(--bs-primary)`/
+    // `var(--bs-list-group-active-color)`, both Bootstrap-defined vars no longer present).
+    const isActive = props.selectedIndex === index
+    const linkColor = isActive ? "#fff" : "var(--color-primary)"
     return (
-      <li className={props.selectedIndex === index ? "list-group-item active" : "list-group-item"} onClick={props.editLink ? undefined : handleClick} key={index}>
+      <li
+        className={isActive ? "px-4 py-2 border-b border-gray-300 last:border-b-0 bg-primary text-white" : "px-4 py-2 border-b border-gray-300 last:border-b-0 bg-white"}
+        onClick={props.editLink ? undefined : handleClick}
+        key={index}
+      >
         <a
           onClick={handleDelete.bind(null, index)}
-          style={{ float: "right", cursor: "pointer", color: props.selectedIndex === index ? "var(--bs-list-group-active-color)" : "var(--bs-primary)" }}
+          style={{ float: "right", cursor: "pointer", color: linkColor }}
         >
           <i className="fa fa-remove" />
         </a>
         {props.editLink && props.renderEditor != null ? (
-          <a onClick={handleClick} style={{ float: "right", cursor: "pointer", color: props.selectedIndex === index ? "var(--bs-list-group-active-color)" : "var(--bs-primary)", marginRight: 5 }}>
+          <a onClick={handleClick} style={{ float: "right", cursor: "pointer", color: linkColor, marginRight: 5 }}>
             <i className="fa fa-pencil" />
           </a>
         ) : null}
@@ -159,14 +167,14 @@ export function ListEditorComponent<T>(props: {
           getItemId={props.getReorderableKey}
           onReorder={props.onItemsChange}
           renderItem={renderDraggableListItem}
-          element={<ul className="list-group" />}
+          element={<ul className="flex flex-col rounded-md overflow-hidden border border-gray-300" />}
         />
       ) : (
-        <ul className="list-group">{props.items.map(renderListItem)}</ul>
+        <ul className="flex flex-col rounded-md overflow-hidden border border-gray-300">{props.items.map(renderListItem)}</ul>
       )}
       {props.createNew ? (
         <div key="add">
-          <button type="button" className="btn btn-link" onClick={handleAdd}>
+          <button type="button" className="inline-flex items-center bg-transparent border-0 text-primary hover:opacity-75 cursor-pointer" onClick={handleAdd}>
             <i className="fa fa-plus" /> {props.addLabel || "Add"}
           </button>
         </div>

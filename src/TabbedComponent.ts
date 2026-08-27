@@ -27,6 +27,12 @@ export interface TabbedComponentProps {
   onTabClick?: (tabId: string) => void
 }
 
+// Feature 6.4b: migrated from Bootstrap's `.nav.nav-tabs`/`.nav-item`/`.nav-link`/`.btn-link`
+// classes to Tailwind, approximating Bootstrap's tab look (overlapping bottom border via
+// `-mb-px`, active tab's border/background matching the container's bottom border).
+const NAV_LINK_BASE = "inline-block -mb-px px-4 py-2 border border-transparent rounded-t cursor-pointer hover:border-gray-200"
+const NAV_LINK_ACTIVE = `${NAV_LINK_BASE} text-gray-700 bg-white border-gray-300 border-b-white`
+
 /** Simple bootstrap tabbed component */
 export default class TabbedComponent extends React.Component<TabbedComponentProps, { tabId?: string }> {
   constructor(props: any) {
@@ -56,19 +62,23 @@ export default class TabbedComponent extends React.Component<TabbedComponentProp
     }
     return R(
       "li",
-      { key: tab.id, className: "nav-item" },
+      { key: tab.id },
       R(
         "a",
         {
           onClick: this.handleClick.bind(null, tab.id),
           style: { cursor: "pointer" },
-          className: tabId === tab.id ? "nav-link active" : "nav-link"
+          className: tabId === tab.id ? NAV_LINK_ACTIVE : NAV_LINK_BASE
         },
         tab.label,
         tab.onRemove
           ? R(
               "button",
-              { type: "button", className: "btn btn-sm btn-link", onClick: this.handleRemove.bind(null, tab) },
+              {
+                type: "button",
+                className: "inline-flex items-center px-1 py-0.5 text-sm bg-transparent border-0 text-primary hover:opacity-75 cursor-pointer",
+                onClick: this.handleRemove.bind(null, tab)
+              },
               R("span", { className: "fa fa-times" })
             )
           : undefined
@@ -90,15 +100,15 @@ export default class TabbedComponent extends React.Component<TabbedComponentProp
       null,
       R(
         "ul",
-        { key: "tabs", className: "nav nav-tabs", style: { marginBottom: 10 } },
+        { key: "tabs", className: "flex flex-wrap list-none border-b border-gray-300 m-0 p-0", style: { marginBottom: 10 } },
         _.map(this.props.tabs, this.renderTab),
         this.props.onAddTab
           ? R(
               "li",
-              { key: "_add", className: "nav-item" },
+              { key: "_add" },
               R(
                 "a",
-                { className: "nav-link", onClick: this.props.onAddTab, style: { cursor: "pointer" } },
+                { className: NAV_LINK_BASE, onClick: this.props.onAddTab, style: { cursor: "pointer" } },
                 R("i", { className: "fa fa-plus" })
               )
             )

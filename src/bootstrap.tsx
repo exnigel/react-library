@@ -3,6 +3,22 @@ import classnames from "classnames"
 import React, { CSSProperties, ReactNode, useState } from "react"
 const R = React.createElement
 
+// Feature 6.4b: migrated from Bootstrap classes to Tailwind utilities (mwater-forms's
+// FEATURE_MAP_AND_MILESTONES.md, Feature 6.4). A few deliberate approximations, not pixel-perfect
+// Bootstrap replication:
+// - Hover/darken states use `hover:opacity-90` rather than Bootstrap's actual darkened shade
+//   (e.g. btn-primary:hover's #0b5ed7) -- correct family of color, not the exact same hex.
+// - `.btn-group`'s connected/shared-border look (no gap, shared corners between buttons) is
+//   approximated as a plain `inline-flex` with a small gap, not replicated exactly.
+// - `.form-check`/checkbox/radio inputs keep their native browser appearance (not Bootstrap's
+//   custom SVG-background square/circle) with Tailwind's `accent-*` utility for the checked-state
+//   color -- visually close, not identical across browsers.
+// - `.form-select`'s custom chevron background-image is skipped; the native `<select>` arrow
+//   renders instead.
+// Bootstrap's spacer scale (0.25/0.5/1/1.5/3rem for 1-5) does NOT numerically match Tailwind's
+// own (0.25rem per unit) -- e.g. Bootstrap's `mb-3` (1rem) is Tailwind's `mb-4`, not `mb-3`.
+// Every spacing utility below was converted through that mapping, not copied by number.
+
 // Bootstrap components
 
 /** Simple spinner */
@@ -23,6 +39,21 @@ export class Button extends React.Component<{
 }> {
   static defaultProps = { type: "secondary" }
 
+  // btn-{type} -> a solid bg/border/text combo per Bootstrap type, using the color tokens
+  // app/tailwind.css defines to match this app's real Bootstrap palette exactly. warning/info/
+  // light use dark text (poor contrast with white on those lighter backgrounds), matching
+  // Bootstrap's own behavior.
+  static typeClasses: Record<string, string> = {
+    primary: "bg-primary border-primary text-white",
+    secondary: "bg-secondary border-secondary text-white",
+    success: "bg-success border-success text-white",
+    danger: "bg-danger border-danger text-white",
+    warning: "bg-warning border-warning text-dark",
+    info: "bg-info border-info text-dark",
+    light: "bg-light border-light text-dark",
+    dark: "bg-dark border-dark text-white"
+  }
+
   render() {
     const type = this.props.type == "default" ? "secondary" : this.props.type
     const size = this.props.size == "xs" ? "sm" : this.props.size
@@ -32,10 +63,10 @@ export class Button extends React.Component<{
       {
         type: "button",
         className: classnames(
-          "btn",
-          `btn-${type}`,
-          { active: this.props.active },
-          { [`btn-${size}`]: this.props.size != null }
+          "inline-block text-center align-middle cursor-pointer select-none border rounded transition-colors hover:opacity-90 disabled:opacity-65 disabled:cursor-not-allowed",
+          Button.typeClasses[type] || Button.typeClasses.secondary,
+          { "inset-shadow-sm": this.props.active },
+          size === "sm" ? "px-2 py-1 text-sm rounded" : size === "lg" ? "px-4 py-2 text-lg rounded-lg" : "px-3 py-1.5 text-base"
         ),
         onClick: this.props.onClick,
         disabled: this.props.disabled
@@ -77,16 +108,16 @@ export class FormGroup extends React.Component<{
   render() {
     return R(
       "div",
-      { className: "mb-3" },
+      { className: "mb-4" },
       R(
         "label",
         { key: "label" },
-        this.props.labelMuted ? R("span", { className: "text-muted" }, this.props.label) : this.props.label,
+        this.props.labelMuted ? R("span", { className: "text-secondary" }, this.props.label) : this.props.label,
 
         this.props.hint
           ? R(
               "span",
-              { className: "text-muted", style: { fontWeight: this.props.label ? "normal" : undefined } },
+              { className: "text-secondary", style: { fontWeight: this.props.label ? "normal" : undefined } },
               this.props.label ? " - " : undefined,
               this.props.hint
             )
@@ -95,7 +126,7 @@ export class FormGroup extends React.Component<{
 
       R("div", { key: "contents", style: { marginLeft: 5 } }, this.props.children),
       this.props.help
-        ? R("p", { key: "help", className: "form-text text-muted", style: { marginLeft: 5 } }, this.props.help)
+        ? R("p", { key: "help", className: "mt-1 text-sm text-secondary", style: { marginLeft: 5 } }, this.props.help)
         : undefined
     )
   }
@@ -132,35 +163,19 @@ export class Checkbox extends React.Component<CheckboxProps> {
   }
 
   render() {
-    if (this.props.inline) {
-      return R(
-        "div",
-        { className: "form-check form-check-inline" },
-        R("input", {
-          type: "checkbox",
-          id: this.id,
-          disabled: this.props.disabled,
-          className: "form-check-input",
-          checked: this.props.value || false,
-          onChange: this.props.onChange ? this.handleChange : undefined
-        }),
-        R("label", { className: "form-check-label", htmlFor: this.id }, this.props.children)
-      )
-    } else {
-      return R(
-        "div",
-        { className: "form-check" },
-        R("input", {
-          type: "checkbox",
-          id: this.id,
-          disabled: this.props.disabled,
-          className: "form-check-input",
-          checked: this.props.value || false,
-          onChange: this.props.onChange ? this.handleChange : undefined
-        }),
-        R("label", { className: "form-check-label", htmlFor: this.id }, this.props.children)
-      )
-    }
+    return R(
+      "div",
+      { className: classnames("flex items-center gap-2 mb-0.5", { "inline-flex mr-4 mb-0": this.props.inline }) },
+      R("input", {
+        type: "checkbox",
+        id: this.id,
+        disabled: this.props.disabled,
+        className: "w-4 h-4 accent-primary",
+        checked: this.props.value || false,
+        onChange: this.props.onChange ? this.handleChange : undefined
+      }),
+      R("label", { className: "cursor-pointer", htmlFor: this.id }, this.props.children)
+    )
   }
 }
 
@@ -193,37 +208,20 @@ export class Radio extends React.Component<RadioProps> {
   }
 
   render() {
-    if (this.props.inline) {
-      return R(
-        "div",
-        { className: "form-check form-check-inline" },
-        R("input", {
-          type: "radio",
-          className: "form-check-input",
-          id: this.id,
-          disabled: this.props.disabled,
-          checked: this.props.value === this.props.radioValue,
-          onChange() {}, // Do nothing
-          onClick: this.props.onChange ? (ev) => this.props.onChange(this.props.radioValue) : undefined
-        }),
-        R("label", { className: "form-check-label", htmlFor: this.id }, this.props.children)
-      )
-    } else {
-      return R(
-        "div",
-        { className: "form-check" },
-        R("input", {
-          type: "radio",
-          className: "form-check-input",
-          id: this.id,
-          disabled: this.props.disabled,
-          checked: this.props.value === this.props.radioValue,
-          onChange() {}, // Do nothing
-          onClick: this.props.onChange ? (ev) => this.props.onChange(this.props.radioValue) : undefined
-        }),
-        R("label", { className: "form-check-label", htmlFor: this.id }, this.props.children)
-      )
-    }
+    return R(
+      "div",
+      { className: classnames("flex items-center gap-2 mb-0.5", { "inline-flex mr-4 mb-0": this.props.inline }) },
+      R("input", {
+        type: "radio",
+        className: "w-4 h-4 accent-primary",
+        id: this.id,
+        disabled: this.props.disabled,
+        checked: this.props.value === this.props.radioValue,
+        onChange() {}, // Do nothing
+        onClick: this.props.onChange ? (ev) => this.props.onChange(this.props.radioValue) : undefined
+      }),
+      R("label", { className: "cursor-pointer", htmlFor: this.id }, this.props.children)
+    )
   }
 }
 
@@ -261,9 +259,8 @@ export class Select<T> extends React.Component<{
         style,
         disabled: this.props.onChange == null,
         className: classnames(
-          "form-select",
-          { "form-select-sm": this.props.size === "sm" },
-          { "form-select-lg": this.props.size === "lg" }
+          "block w-full bg-white border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
+          this.props.size === "sm" ? "px-2 py-1 text-sm" : this.props.size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base"
         ),
         value: JSON.stringify(this.props.value != null ? this.props.value : null),
         onChange: this.props.onChange ? this.handleChange : function () {}
@@ -318,9 +315,8 @@ export class TextInput extends React.Component<TextInputProps> {
       },
       type: "text",
       className: classnames(
-        "form-control",
-        { "form-control-sm": this.props.size === "sm" },
-        { "form-control-lg": this.props.size === "lg" }
+        "block w-full bg-white border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
+        this.props.size === "sm" ? "px-2 py-1 text-sm" : this.props.size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base"
       ),
       value: this.props.value || "",
       style: this.props.style,
@@ -493,7 +489,10 @@ export class NumberInput extends React.Component<NumberInputProps, { inputText: 
         return (this.input = c)
       },
       type: inputType,
-      className: `form-control ${this.props.size ? `form-control-${this.props.size}` : ""}`,
+      className: classnames(
+        "block w-full bg-white border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
+        this.props.size === "sm" ? "px-2 py-1 text-sm" : this.props.size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base"
+      ),
       lang: "en",
       style,
       value: this.state.inputText,
@@ -538,20 +537,20 @@ export class CollapsibleSection extends React.Component<CollapsibleSectionProps,
   render() {
     return R(
       "div",
-      { className: "mb-3" },
+      { className: "mb-4" },
       R(
         "label",
         { key: "label", onClick: this.handleToggle, style: { cursor: "pointer" } },
         this.state.open
-          ? R("i", { className: `fa fa-fw fa-caret-down ${this.props.labelMuted ? "text-muted" : undefined}` })
-          : R("i", { className: `fa fa-fw fa-caret-right ${this.props.labelMuted ? "text-muted" : undefined}` }),
+          ? R("i", { className: `fa fa-fw fa-caret-down ${this.props.labelMuted ? "text-secondary" : undefined}` })
+          : R("i", { className: `fa fa-fw fa-caret-right ${this.props.labelMuted ? "text-secondary" : undefined}` }),
 
-        this.props.labelMuted ? R("span", { className: "text-muted" }, this.props.label) : this.props.label,
+        this.props.labelMuted ? R("span", { className: "text-secondary" }, this.props.label) : this.props.label,
 
         this.props.hint
           ? R(
               "span",
-              { className: "text-muted", style: { fontWeight: this.props.label ? "normal" : undefined } },
+              { className: "text-secondary", style: { fontWeight: this.props.label ? "normal" : undefined } },
               this.props.label ? " - " : undefined,
               this.props.hint
             )
@@ -577,17 +576,20 @@ export class NavPills extends React.Component<{
   render() {
     return R(
       "ul",
-      { className: "nav nav-pills" },
+      { className: "flex flex-wrap list-none p-0 m-0" },
       _.map(this.props.pills, (pill) => {
         return R(
           "li",
-          { key: pill.id, className: "nav-item" },
+          { key: pill.id },
           R(
             "a",
             {
               href: pill.href,
               onClick: () => this.props.onPillClick?.(pill.id),
-              className: pill.id === this.props.activePill ? "nav-link active" : "nav-link"
+              className: classnames(
+                "inline-block px-4 py-2 rounded cursor-pointer no-underline",
+                pill.id === this.props.activePill ? "bg-primary text-white" : "text-primary hover:bg-gray-100"
+              )
             },
             pill.label
           )
@@ -608,11 +610,13 @@ export class Toggle<T> extends React.Component<{
 }> {
   renderOption = (option: any, index: any) => {
     const value = this.props.value === option.value && this.props.allowReset ? null : option.value
-    const btnClasses = classnames("btn", {
-      "btn-outline-primary": !(this.props.value === option.value),
-      "btn-primary": this.props.value === option.value,
-      active: this.props.value === option.value
-    })
+    const isSelected = this.props.value === option.value
+    const size = this.props.size == "xs" ? "sm" : this.props.size
+    const btnClasses = classnames(
+      "inline-block text-center align-middle cursor-pointer select-none border rounded transition-colors",
+      size === "sm" ? "px-2 py-1 text-sm" : size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base",
+      isSelected ? "bg-primary border-primary text-white" : "bg-transparent border-primary text-primary hover:bg-primary hover:text-white"
+    )
 
     const props = {
       key: index,
@@ -622,7 +626,7 @@ export class Toggle<T> extends React.Component<{
       style: { whiteSpace: "nowrap" }
     }
 
-    if (!(this.props.value === option.value) || this.props.allowReset) {
+    if (!isSelected || this.props.allowReset) {
       props["onClick"] = this.props.onChange ? this.props.onChange.bind(null, value) : null
     }
 
@@ -630,13 +634,7 @@ export class Toggle<T> extends React.Component<{
   }
 
   render() {
-    const size = this.props.size == "xs" ? "sm" : this.props.size
-
-    return R(
-      "div",
-      { className: `btn-group ${size ? `btn-group-${size}` : ""}` },
-      _.map(this.props.options, this.renderOption)
-    )
+    return R("div", { className: "inline-flex gap-0.5" }, _.map(this.props.options, this.renderOption))
   }
 }
 
@@ -649,17 +647,17 @@ export function CollapsiblePanel(props: {
 }) {
   const [open, setOpen] = useState(props.initiallyClosed ? false : true)
 
-  return <div className="card mb-3">
-    <div className="card-header">
+  return <div className="border border-gray-200 rounded mb-4">
+    <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
       <div
-        style={{ display: "inline-block", paddingRight: 5, color: "var(--bs-primary)", cursor: "pointer" }}
+        className="inline-block pr-1 text-primary cursor-pointer"
         onClick={() => setOpen((o) => !o)}
       >
         { open ? <i className="fas fa-caret-down fa-fw" /> : <i className="fas fa-caret-right fa-fw" /> }
       </div>
       {props.title}
-      {props.hint ? <span className="text-muted">{" - "}{props.hint}</span> : null}
+      {props.hint ? <span className="text-secondary">{" - "}{props.hint}</span> : null}
     </div>
-    { open ? <div className="card-body">{props.children}</div> : null }
+    { open ? <div className="p-4">{props.children}</div> : null }
   </div>
 }
