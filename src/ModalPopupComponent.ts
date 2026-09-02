@@ -137,11 +137,14 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
         { className: `relative mx-auto my-8 w-[calc(100%-1rem)] ${dialogSizeClass}`, style: dialogStyle },
         R(
           "div",
-          { className: "relative flex flex-col w-full bg-white border border-black/20 rounded-md shadow-lg outline-none" },
+          // Feature 12.1's "Slate instrument" system is borders-only for elevation (no
+          // box-shadow anywhere -- shadows wash out in direct sunlight), so a modal's separation
+          // from the page relies on `border-strong` alone, not a dropped shadow.
+          { className: "relative flex flex-col w-full bg-surface text-ink border border-border-strong rounded-md outline-none" },
           this.props.header
             ? R(
                 "div",
-                { className: "flex items-center justify-between px-4 py-3 border-b border-gray-200 rounded-t-md" },
+                { className: "flex items-center justify-between px-4 py-3 border-b border-border rounded-t-md" },
                 R("h5", { className: "text-lg font-medium m-0", "data-testid": "modal-title" }, this.props.header),
                 this.props.showCloseX
                   ? R("button", { type: "button", className: CLOSE_BUTTON_CLASSES, "aria-label": "Close", onClick: this.props.onClose }, "×")
@@ -161,7 +164,7 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
             this.props.children
           ),
           this.props.footer
-            ? R("div", { className: "flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-200 rounded-b-md" }, this.props.footer)
+            ? R("div", { className: "flex items-center justify-end gap-2 px-4 py-3 border-t border-border rounded-b-md" }, this.props.footer)
             : undefined,
 
           !this.props.header && this.props.showCloseX

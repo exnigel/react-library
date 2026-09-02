@@ -22,8 +22,10 @@ export default class Divider extends React.Component<{
 
   render() {
     const classNames = ["divider"]
+    // Feature 12.1/12.2: was a hardcoded #aeaeae. NOT live-verified against the real running
+    // app -- confirmed via grep that no file in mwater-forms's app/ or src/ imports SplitPane.
     const style: CSSProperties = {
-      backgroundColor: "#aeaeae"
+      backgroundColor: "var(--color-border-strong)"
     }
 
     if (this.props.split === "horizontal") {

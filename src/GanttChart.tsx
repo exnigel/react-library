@@ -3,6 +3,16 @@ import AutoSizeComponent from "./AutoSizeComponent"
 import moment, { Moment } from "moment"
 import { LocalizeString } from "ez-localize"
 
+// @deprecated Feature 12.2: this component's row-actions dropdown (`data-bs-toggle="dropdown"`,
+// below) is driven by Bootstrap's own Dropdown JS widget, which mwater-forms no longer loads at
+// all (Bootstrap CSS+JS both fully removed in Feature 6.4d) -- confirmed via grep that no file in
+// mwater-forms's app/, src/, test/, or stories/ imports GanttChart either way, so this was never
+// actually reachable from the live app. Per Feature 12.1/FEATURE_MAP_AND_MILESTONES.md's own
+// explicit choice ("reimplement without Bootstrap, or formally deprecate") -- formally deprecated
+// (its own SVG/hardcoded colors were left untouched too, for the same reason) rather than
+// redesigned, since a real Tailwind-native dropdown for zero live consumers isn't a good use of
+// this redesign's effort. A future real consumer should get a proper non-Bootstrap dropdown.
+
 /** Row of a GANTT chart */
 export interface GanttChartRow {
   /** Label to left */

@@ -87,11 +87,16 @@ export function ListEditorComponent<T>(props: {
 
     // Feature 6.4b: was Bootstrap's `.list-group-item`/`.active` (with `var(--bs-primary)`/
     // `var(--bs-list-group-active-color)`, both Bootstrap-defined vars no longer present).
+    // Feature 12.1/12.2: `linkColor`'s hardcoded "#fff" assumed the active row's text is always
+    // white -- true only in the old light-mode-only palette. `--color-on-primary` is the correct,
+    // mode-adaptive equivalent (dark text in dark mode, since dark-mode's primary fill is a light
+    // pastel). NOT live-verified against the real running app -- confirmed via grep that no file
+    // in mwater-forms's app/ or src/ imports ListEditorComponent.
     const isActive = props.selectedIndex === index
-    const linkColor = isActive ? "#fff" : "var(--color-primary)"
+    const linkColor = isActive ? "var(--color-on-primary)" : "var(--color-primary)"
     return (
       <li
-        className={isActive ? "px-4 py-2 border-b border-gray-300 last:border-b-0 bg-primary text-white" : "px-4 py-2 border-b border-gray-300 last:border-b-0 bg-white"}
+        className={isActive ? "px-4 py-2 border-b border-border last:border-b-0 bg-primary text-on-primary" : "px-4 py-2 border-b border-border last:border-b-0 bg-surface text-ink"}
         onClick={props.editLink ? undefined : handleClick}
         key={index}
       >
@@ -167,10 +172,10 @@ export function ListEditorComponent<T>(props: {
           getItemId={props.getReorderableKey}
           onReorder={props.onItemsChange}
           renderItem={renderDraggableListItem}
-          element={<ul className="flex flex-col rounded-md overflow-hidden border border-gray-300" />}
+          element={<ul className="flex flex-col rounded-md overflow-hidden border border-border-strong" />}
         />
       ) : (
-        <ul className="flex flex-col rounded-md overflow-hidden border border-gray-300">{props.items.map(renderListItem)}</ul>
+        <ul className="flex flex-col rounded-md overflow-hidden border border-border-strong">{props.items.map(renderListItem)}</ul>
       )}
       {props.createNew ? (
         <div key="add">

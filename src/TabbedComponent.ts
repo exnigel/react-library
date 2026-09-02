@@ -30,8 +30,16 @@ export interface TabbedComponentProps {
 // Feature 6.4b: migrated from Bootstrap's `.nav.nav-tabs`/`.nav-item`/`.nav-link`/`.btn-link`
 // classes to Tailwind, approximating Bootstrap's tab look (overlapping bottom border via
 // `-mb-px`, active tab's border/background matching the container's bottom border).
-const NAV_LINK_BASE = "inline-block -mb-px px-4 py-2 border border-transparent rounded-t cursor-pointer hover:border-gray-200"
-const NAV_LINK_ACTIVE = `${NAV_LINK_BASE} text-gray-700 bg-white border-gray-300 border-b-white`
+// Feature 12.1/12.2: raw `gray-*`/`white` classes replaced with the semantic tokens
+// app/tailwind.css defines -- `border-b-white` in particular relied on the panel below always
+// being literally white to visually "erase" that border, which broke once dark mode made surfaces
+// dark; `border-b-surface` tracks whatever the real panel background is in either mode. NOT
+// live-verified against the real running app -- confirmed via grep that no file in mwater-forms's
+// app/ or src/ actually imports TabbedComponent, so this mechanical substitution follows the same
+// pattern already verified live on Button/Select/ModalPopupComponent, but couldn't be re-verified
+// in a browser the way those could.
+const NAV_LINK_BASE = "inline-block -mb-px px-4 py-2 border border-transparent rounded-t cursor-pointer hover:border-border"
+const NAV_LINK_ACTIVE = `${NAV_LINK_BASE} text-ink bg-surface border-border-strong border-b-surface`
 
 /** Simple bootstrap tabbed component */
 export default class TabbedComponent extends React.Component<TabbedComponentProps, { tabId?: string }> {
@@ -100,7 +108,7 @@ export default class TabbedComponent extends React.Component<TabbedComponentProp
       null,
       R(
         "ul",
-        { key: "tabs", className: "flex flex-wrap list-none border-b border-gray-300 m-0 p-0", style: { marginBottom: 10 } },
+        { key: "tabs", className: "flex flex-wrap list-none border-b border-border-strong m-0 p-0", style: { marginBottom: 10 } },
         _.map(this.props.tabs, this.renderTab),
         this.props.onAddTab
           ? R(

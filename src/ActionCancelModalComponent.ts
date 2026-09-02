@@ -48,7 +48,7 @@ export default class ActionCancelModalComponent extends React.Component<ActionCa
                   key: "delete",
                   type: "button",
                   onClick: this.props.onDelete,
-                  className: `${BTN_BASE} bg-danger border-danger text-white mr-auto`
+                  className: `${BTN_BASE} bg-danger border-danger text-on-danger mr-auto`
                 },
                 this.props.deleteBusy ? [R("i", { className: "fa fa-spinner fa-spin" }), "\u00A0"] : undefined,
                 this.props.deleteLabel || "Delete"
@@ -62,7 +62,7 @@ export default class ActionCancelModalComponent extends React.Component<ActionCa
                   type: "button",
                   onClick: this.props.onAction,
                   disabled: this.props.actionBusy,
-                  className: `${BTN_BASE} bg-primary border-primary text-white`
+                  className: `${BTN_BASE} bg-primary border-primary text-on-primary`
                 },
                 this.props.actionBusy ? [R("i", { className: "fa fa-spinner fa-spin" }), "\u00A0"] : undefined,
                 this.props.actionLabel || "Save"
@@ -74,7 +74,7 @@ export default class ActionCancelModalComponent extends React.Component<ActionCa
               key: "cancel",
               type: "button",
               onClick: this.props.onCancel,
-              className: `${BTN_BASE} bg-secondary border-secondary text-white`
+              className: `${BTN_BASE} bg-secondary border-secondary text-on-secondary`
             },
             this.props.cancelLabel || (this.props.onAction ? "Cancel" : "Close")
           ),

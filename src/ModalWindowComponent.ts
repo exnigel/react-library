@@ -111,7 +111,11 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
       zIndex: 1055, // Same as bootstrap modals
       backgroundColor: this.props.backgroundColor,
       borderRadius: 10,
-      border: "solid 1px #AAA"
+      // Feature 12.1/12.2: was a hardcoded #AAA -- border-strong is the mode-adaptive equivalent
+      // (this app's real WCAG-checked "operable UI boundary" tone). NOT live-verified against the
+      // real running app -- confirmed via grep that no file in mwater-forms's app/ or src/
+      // imports ModalWindowComponent.
+      border: "solid 1px var(--color-border-strong)"
     }
 
     const contentStyle = {
@@ -127,7 +131,7 @@ class InnerModalComponent extends React.Component<InnerModalComponentProps> {
       position: "absolute",
       right: 8,
       top: 8,
-      color: "#888",
+      color: "var(--color-ink-soft)",
       cursor: "pointer"
     }
 

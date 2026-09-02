@@ -40,18 +40,21 @@ export class Button extends React.Component<{
   static defaultProps = { type: "secondary" }
 
   // btn-{type} -> a solid bg/border/text combo per Bootstrap type, using the color tokens
-  // app/tailwind.css defines to match this app's real Bootstrap palette exactly. warning/info/
-  // light use dark text (poor contrast with white on those lighter backgrounds), matching
-  // Bootstrap's own behavior.
+  // app/tailwind.css defines. Feature 12.1 (mwater-forms's "Slate instrument" redesign) made
+  // every on-{role} pairing mode-adaptive -- in dark mode, primary/secondary/success/danger/dark
+  // all become light-toned pastel fills that need DARK text, not white, so a hardcoded
+  // `text-white`/`text-dark` here would be unreadable in dark mode even though it looked fine in
+  // the old, light-mode-only Bootstrap-parity palette. `text-on-{role}` resolves to the correct
+  // ink for whichever mode is active.
   static typeClasses: Record<string, string> = {
-    primary: "bg-primary border-primary text-white",
-    secondary: "bg-secondary border-secondary text-white",
-    success: "bg-success border-success text-white",
-    danger: "bg-danger border-danger text-white",
-    warning: "bg-warning border-warning text-dark",
-    info: "bg-info border-info text-dark",
+    primary: "bg-primary border-primary text-on-primary",
+    secondary: "bg-secondary border-secondary text-on-secondary",
+    success: "bg-success border-success text-on-success",
+    danger: "bg-danger border-danger text-on-danger",
+    warning: "bg-warning border-warning text-on-warning",
+    info: "bg-info border-info text-on-info",
     light: "bg-light border-light text-dark",
-    dark: "bg-dark border-dark text-white"
+    dark: "bg-dark border-dark text-light"
   }
 
   render() {
@@ -259,7 +262,7 @@ export class Select<T> extends React.Component<{
         style,
         disabled: this.props.onChange == null,
         className: classnames(
-          "block w-full bg-white border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
+          "block w-full bg-surface text-ink border border-border-strong rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
           this.props.size === "sm" ? "px-2 py-1 text-sm" : this.props.size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base"
         ),
         value: JSON.stringify(this.props.value != null ? this.props.value : null),
@@ -315,7 +318,7 @@ export class TextInput extends React.Component<TextInputProps> {
       },
       type: "text",
       className: classnames(
-        "block w-full bg-white border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
+        "block w-full bg-surface text-ink border border-border-strong rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
         this.props.size === "sm" ? "px-2 py-1 text-sm" : this.props.size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base"
       ),
       value: this.props.value || "",
@@ -472,9 +475,12 @@ export class NumberInput extends React.Component<NumberInputProps, { inputText: 
     const style = _.clone(this.props.style || {})
     style.width = style.width || "8em"
     if (!this.isValid()) {
-      style.borderColor = "#a94442"
-      style.boxShadow = "inset 0 1px 1px rgba(0,0,0,.075)"
-      style.backgroundColor = "rgba(132, 53, 52, 0.12)" // Faded red
+      // Feature 12.1's "Slate instrument" system is borders-only for elevation/state (no
+      // box-shadow anywhere -- shadows wash out in direct sunlight), and every color here now
+      // comes from the real `--color-danger`/`--color-danger`-derived tokens instead of a
+      // hardcoded Bootstrap-era hex, so this reads correctly in dark mode too.
+      style.borderColor = "var(--color-danger)"
+      style.backgroundColor = "color-mix(in srgb, var(--color-danger) 12%, transparent)"
     }
 
     let inputType = this.props.decimal ? "number" : "tel"
@@ -490,7 +496,7 @@ export class NumberInput extends React.Component<NumberInputProps, { inputText: 
       },
       type: inputType,
       className: classnames(
-        "block w-full bg-white border border-gray-300 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
+        "block w-full bg-surface text-ink border border-border-strong rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-65",
         this.props.size === "sm" ? "px-2 py-1 text-sm" : this.props.size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base"
       ),
       lang: "en",
@@ -588,7 +594,7 @@ export class NavPills extends React.Component<{
               onClick: () => this.props.onPillClick?.(pill.id),
               className: classnames(
                 "inline-block px-4 py-2 rounded cursor-pointer no-underline",
-                pill.id === this.props.activePill ? "bg-primary text-white" : "text-primary hover:bg-gray-100"
+                pill.id === this.props.activePill ? "bg-primary text-on-primary" : "text-primary hover:bg-border/40"
               )
             },
             pill.label
@@ -615,7 +621,9 @@ export class Toggle<T> extends React.Component<{
     const btnClasses = classnames(
       "inline-block text-center align-middle cursor-pointer select-none border rounded transition-colors",
       size === "sm" ? "px-2 py-1 text-sm" : size === "lg" ? "px-4 py-2 text-lg" : "px-3 py-1.5 text-base",
-      isSelected ? "bg-primary border-primary text-white" : "bg-transparent border-primary text-primary hover:bg-primary hover:text-white"
+      isSelected
+        ? "bg-primary border-primary text-on-primary"
+        : "bg-transparent border-primary text-primary hover:bg-primary hover:text-on-primary"
     )
 
     const props = {
@@ -647,8 +655,8 @@ export function CollapsiblePanel(props: {
 }) {
   const [open, setOpen] = useState(props.initiallyClosed ? false : true)
 
-  return <div className="border border-gray-200 rounded mb-4">
-    <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
+  return <div className="border border-border rounded mb-4">
+    <div className="px-4 py-2 bg-bg border-b border-border">
       <div
         className="inline-block pr-1 text-primary cursor-pointer"
         onClick={() => setOpen((o) => !o)}
